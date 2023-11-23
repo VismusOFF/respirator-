@@ -33,6 +33,9 @@ body {
   justify-content: center;
   align-items: center;
   background-color: #213547;
+   background-image: url('/public/1.jpg');
+   background-size: cover;
+   background-position: center;
 }
 
 h1 {
