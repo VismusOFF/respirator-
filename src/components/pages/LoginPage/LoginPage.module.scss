@@ -20,14 +20,14 @@
     }
     button {
         margin: 10px;
-        color: #333;
-        background: linear-gradient(to right top, #646cffaa, #646cffff);
+        color: white;
+        background: #646cffaa;
         transition: 0.2s;
         border: none;
         outline: none;
     }
     button:hover {
-        color: white;
+        background: #646cffff;
         transition: 0.2s;
     }
     input {
@@ -36,13 +36,19 @@
         box-shadow: none;
         border: none;
         background: transparent;
-        border-bottom: 3px solid #646cffaa;
+        border-bottom: 3px solid white;
         border-radius: 0px;
+        transition: 0.2s;
     }
     input:hover {
-        border-color: #646cffff;
+        border-color: #646cffaa;
+        transition: 0.2s;
     }
     input:focus {
-        border-color: white;
+        border-color: #646cffff;
+        transition: 0.2s;
     }
+    input::placeholder {
+        color: white;
+    } 
 }

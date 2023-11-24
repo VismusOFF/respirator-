@@ -10,6 +10,9 @@ const Navbar = () => (
         <Link to='/'>
             <h3>Login</h3>
         </Link>
+        <Link to='/main'>
+            <h3>CrudApp</h3>
+        </Link>
     </div>
 );
 

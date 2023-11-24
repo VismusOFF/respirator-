@@ -1,0 +1,86 @@
+.MainPageContainer {
+    border-radius: 15px;
+    background: transparent;
+    border: 3px solid #646cffaa;
+    backdrop-filter: blur(15px);
+    margin: 10px;
+    padding: 10px;
+}
+
+.HeaderRow {
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+}
+
+.ProductListContainer {
+    max-height: 400px; /* Максимальная высота, после которой появится прокрутка */
+    overflow-y: auto; /* скролл появляется по вертикали, когда это необходимо */
+    /* другие стили */
+}
+
+.ProductListContainer::-webkit-scrollbar {
+    display: none; /* скрываем ползунок */
+}
+
+.ProductRow {
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.ProductName,
+.ProductPrice,
+.ProductCost {
+    flex: 1;
+    text-align: left;
+}
+
+.DeleteButton,
+.AddButton {
+    background: #646cffaa;
+    margin-left: auto;
+    // More styling for the delete button
+}
+
+input {
+    color: white;
+    margin: 10px;
+    outline: none;
+}
+button {
+    margin: 10px;
+    color: white;
+    background: #646cffaa;
+    transition: 0.2s;
+    border: none;
+    outline: none;
+}
+button:hover {
+    background: #646cffff;
+    transition: 0.2s;
+}
+input {
+    height: 30px;
+    border-radius: 5px;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    border-bottom: 3px solid white;
+    border-radius: 0px;
+    transition: 0.2s;
+}
+input:hover {
+    border-color: #646cffaa;
+    transition: 0.2s;
+}
+input:focus {
+    border-color: #646cffff;
+    transition: 0.2s;
+}
+input::placeholder {
+    color: white;
+}
