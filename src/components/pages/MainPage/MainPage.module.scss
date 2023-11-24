@@ -17,7 +17,6 @@
 .ProductListContainer {
     max-height: 400px; /* Максимальная высота, после которой появится прокрутка */
     overflow-y: auto; /* скролл появляется по вертикали, когда это необходимо */
-    /* другие стили */
 }
 
 .ProductListContainer::-webkit-scrollbar {
