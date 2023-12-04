@@ -10,7 +10,8 @@
     background: transparent;
     border: 3px solid #646cffaa;
     backdrop-filter: blur(15px);
-    h2 {
+    h2,
+    .error {
         color: white;
     }
     input {

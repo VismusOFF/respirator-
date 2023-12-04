@@ -38,8 +38,32 @@
     text-align: left;
 }
 
+.PrName {
+    margin-left: 50px;
+    cursor: pointer;
+}
+
+.PrAction {
+    margin-right: 100px;
+}
+
+.PrCost {
+    margin-right: 120px;
+}
+
+.PrPrice {
+    margin-right: 70px;
+}
+
+.PrName:hover {
+    text-decoration: underline;
+}
+
 .DeleteButton,
-.AddButton {
+.AddButton,
+.CancelButton,
+.EditButton
+ {
     background: #646cffaa;
     margin-left: auto;
     // More styling for the delete button

@@ -5,106 +5,167 @@ import { uid } from 'uid';
 import { ref, set, onValue, remove } from 'firebase/database';
 
 function MainPage() {
-    const [product, setProduct] = useState({
-        productName: '',
-        price: '',
-        cost: '',
+  const [product, setProduct] = useState({
+    productName: '',
+    price: '',
+    cost: '',
+  });
+  const [editProduct, setEditProduct] = useState(null);
+  const [products, setProducts] = useState({});
+  const [sortOrder, setSortOrder] = useState('asc'); // Новое состояние для отслеживания порядка сортировки
+
+  useEffect(() => {
+    const productsRef = ref(db, '/');
+    const unsubscribe = onValue(productsRef, (snapshot) => {
+      setProducts(snapshot.val() || {});
     });
-    const [products, setProducts] = useState({});
 
-    useEffect(() => {
-        const productsRef = ref(db, '/');
-        const unsubscribe = onValue(productsRef, (snapshot) => {
-            setProducts(snapshot.val() || {});
-        });
+    return () => unsubscribe();
+  }, []);
 
-        return () => unsubscribe();
-    }, []);
+  const handleChange = (e) => {
+    setProduct({
+      ...product,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    const handleChange = (e) => {
-        setProduct({
-            ...product,
-            [e.target.name]: e.target.value,
-        });
-    };
+  const handleEdit = (key) => {
+    setEditProduct(key);
+    setProduct({
+      ...products[key],
+    });
+  };
 
-    const writeToDatabase = () => {
-        const uuid = uid();
-        set(ref(db, `/${uuid}`), {
-            ...product,
-            uuid: uuid,
-        })
+  const handleCancelEdit = () => {
+    setEditProduct(null);
+    setProduct({
+      productName: '',
+      price: '',
+      cost: '',
+    });
+  };
+
+  const writeToDatabase = () => {
+    const uuid = uid();
+    if (editProduct) {
+      // Редактирование существующего продукта
+      set(ref(db, `/${editProduct}`), {
+        ...product,
+        uuid: editProduct,
+      })
         .then(() => {
-            console.log('Product data written!');
-            setProduct({
-                productName: '',
-                price: '',
-                cost: '',
-            });
+          console.log('Product data updated!');
+          setEditProduct(null);
+          setProduct({
+            productName: '',
+            price: '',
+            cost: '',
+          });
         })
         .catch((error) => {
-            console.error('Error writing product to the database', error);
+          console.error('Error updating product in the database', error);
         });
-    };
-
-    const handleDelete = (uuid) => {
-        remove(ref(db, `/${uuid}`))
+    } else {
+      // Добавление нового продукта
+      set(ref(db, `/${uuid}`), {
+        ...product,
+        uuid: uuid,
+      })
         .then(() => {
-            console.log('Removed:', uuid);
+          console.log('Product data written!');
+          setProduct({
+            productName: '',
+            price: '',
+            cost: '',
+          });
         })
         .catch((error) => {
-            console.error('Could not remove:', error);
+          console.error('Error writing product to the database', error);
         });
-    };
+    }
+  };
 
-    return (
-        <div className={style.MainPageContainer}>
-            <div className={style.InputForm}>
-                <input
-                    name="productName"
-                    value={product.productName}
-                    onChange={handleChange}
-                    className={style.Input}
-                    placeholder="Enter product name"
-                />
-                <input
-                    name="price"
-                    type="number"
-                    value={product.price}
-                    onChange={handleChange}
-                    className={style.Input}
-                    placeholder="Enter price"
-                />
-                <input
-                    name="cost"
-                    type="number"
-                    value={product.cost}
-                    onChange={handleChange}
-                    className={style.Input}
-                    placeholder="Enter cost"
-                />
-                <button className={style.AddButton} onClick={writeToDatabase}>Add Product</button>
-            </div>
-            <div className={style.HeaderRow}>
-                <span>Product Name</span>
-                <span>Price</span>
-                <span>Cost</span>
-                <span>Action</span>
-            </div>
-            <div className={`${style.MainPageContainer} ${style.ProductListContainer}`}>
-                <ol start="1">
-                    {Object.keys(products).map((key) => (
-                        <li key={key} className={style.ProductRow}>
-                            <span className={style.ProductName}>{products[key].productName}</span>
-                            <span className={style.ProductPrice}>{products[key].price}</span>
-                            <span className={style.ProductCost}>{products[key].cost}</span>
-                            <button className={style.DeleteButton} onClick={() => handleDelete(key)}>Delete</button>
-                        </li>
-                    ))}
-                </ol>
-            </div>
-        </div>
-    );
+  const handleDelete = (uuid) => {
+    remove(ref(db, `/${uuid}`))
+      .then(() => {
+        console.log('Removed:', uuid);
+      })
+      .catch((error) => {
+        console.error('Could not remove:', error);
+      });
+  };
+
+  const handleSort = () => {
+    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+  };
+
+  const sortedProducts = Object.entries(products).sort((a, b) => {
+    // Используем логику для сортировки по возрастанию или убыванию
+    const orderMultiplier = sortOrder === 'asc' ? 1 : -1;
+    return orderMultiplier * a[1].productName.localeCompare(b[1].productName);
+  });
+
+  return (
+    <div className={style.MainPageContainer}>
+      <div className={style.InputForm}>
+        <input
+          name="productName"
+          value={product.productName}
+          onChange={handleChange}
+          className={style.Input}
+          placeholder="Enter product name"
+        />
+        <input
+          name="price"
+          type="number"
+          value={product.price}
+          onChange={handleChange}
+          className={style.Input}
+          placeholder="Enter price"
+        />
+        <input
+          name="cost"
+          type="number"
+          value={product.cost}
+          onChange={handleChange}
+          className={style.Input}
+          placeholder="Enter cost"
+        />
+        <button className={style.AddButton} onClick={writeToDatabase}>
+          {editProduct ? 'Update Product' : 'Add Product'}
+        </button>
+        {editProduct && (
+          <button className={style.CancelButton} onClick={handleCancelEdit}>
+            Cancel
+          </button>
+        )}
+      </div>
+      <div className={style.HeaderRow}>
+        <span className={style.PrName} onClick={handleSort}>Product Name</span>
+        <span className={style.PrPrice}>Price</span>
+        <span className={style.PrCost}>Cost</span>
+        <span className={style.PrAction}>Action</span>
+      </div>
+      <div className={`${style.MainPageContainer} ${style.ProductListContainer}`}>
+        <ol start="1">
+          {sortedProducts.map(([key, product]) => (
+            <li key={key} className={style.ProductRow}>
+              <span className={style.ProductName}>{product.productName}</span>
+              <span className={style.ProductPrice}>{product.price}</span>
+              <span className={style.ProductCost}>{product.cost}</span>
+              <button className={style.EditButton} onClick={() => handleEdit(key)}>
+                Edit
+              </button>
+              <button className={style.DeleteButton} onClick={() => handleDelete(key)}>
+                Delete
+              </button>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+  );
 }
 
 export default MainPage;
