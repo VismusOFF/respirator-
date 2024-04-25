@@ -12,7 +12,8 @@ function MainPage() {
   });
   const [editProduct, setEditProduct] = useState(null);
   const [products, setProducts] = useState({});
-  const [sortOrder, setSortOrder] = useState('asc'); // Новое состояние для отслеживания порядка сортировки
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const productsRef = ref(db, '/');
@@ -49,7 +50,6 @@ function MainPage() {
   const writeToDatabase = () => {
     const uuid = uid();
     if (editProduct) {
-      // Редактирование существующего продукта
       set(ref(db, `/${editProduct}`), {
         ...product,
         uuid: editProduct,
@@ -67,7 +67,6 @@ function MainPage() {
           console.error('Error updating product in the database', error);
         });
     } else {
-      // Добавление нового продукта
       set(ref(db, `/${uuid}`), {
         ...product,
         uuid: uuid,
@@ -100,10 +99,17 @@ function MainPage() {
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   const sortedProducts = Object.entries(products).sort((a, b) => {
-    // Используем логику для сортировки по возрастанию или убыванию
     const orderMultiplier = sortOrder === 'asc' ? 1 : -1;
     return orderMultiplier * a[1].productName.localeCompare(b[1].productName);
+  });
+
+  const filteredProducts = sortedProducts.filter(([key, product]) => {
+    return product.productName.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
   return (
@@ -141,15 +147,23 @@ function MainPage() {
           </button>
         )}
       </div>
+      <input
+        value={searchQuery}
+        onChange={handleSearchChange}
+        className={style.Input}
+        placeholder="Search by product name"
+      />
       <div className={style.HeaderRow}>
-        <span className={style.PrName} onClick={handleSort}>Product Name</span>
+        <span className={style.PrName} onClick={handleSort}>
+          Product Name
+        </span>
         <span className={style.PrPrice}>Price</span>
         <span className={style.PrCost}>Cost</span>
         <span className={style.PrAction}>Action</span>
       </div>
       <div className={`${style.MainPageContainer} ${style.ProductListContainer}`}>
         <ol start="1">
-          {sortedProducts.map(([key, product]) => (
+          {filteredProducts.map(([key, product]) => (
             <li key={key} className={style.ProductRow}>
               <span className={style.ProductName}>{product.productName}</span>
               <span className={style.ProductPrice}>{product.price}</span>
@@ -160,11 +174,11 @@ function MainPage() {
               <button className={style.DeleteButton} onClick={() => handleDelete(key)}>
                 Delete
               </button>
-          </li>
-        ))}
-      </ol>
+            </li>
+          ))}
+        </ol>
+      </div>
     </div>
-  </div>
   );
 }
 
