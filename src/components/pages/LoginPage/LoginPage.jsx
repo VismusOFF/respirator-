@@ -25,10 +25,10 @@ const Login = () => {
 
   return (
     <form className={style.loginForm} onSubmit={handleSubmit}>
-      <h2>Login</h2>
-      <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
-      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
-      <button type="submit">Login</button>
+      <h2>Войти</h2>
+      <input type="email" placeholder="Почта" onChange={(e) => setEmail(e.target.value)} required />
+      <input type="password" placeholder="Пароль" onChange={(e) => setPassword(e.target.value)} required />
+      <button type="submit">Войти</button>
 
       {error && <p className={style.error}>{error}</p>} {}
     </form>

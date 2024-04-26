@@ -120,7 +120,7 @@ function MainPage() {
           value={product.productName}
           onChange={handleChange}
           className={style.Input}
-          placeholder="Enter product name"
+          placeholder="Имя продукта"
         />
         <input
           name="price"
@@ -128,7 +128,7 @@ function MainPage() {
           value={product.price}
           onChange={handleChange}
           className={style.Input}
-          placeholder="Enter price"
+          placeholder="Цена"
         />
         <input
           name="cost"
@@ -136,14 +136,14 @@ function MainPage() {
           value={product.cost}
           onChange={handleChange}
           className={style.Input}
-          placeholder="Enter cost"
+          placeholder="Количество"
         />
         <button className={style.AddButton} onClick={writeToDatabase}>
-          {editProduct ? 'Update Product' : 'Add Product'}
+          {editProduct ? 'Обновить продукт' : 'Добавить продукт'}
         </button>
         {editProduct && (
           <button className={style.CancelButton} onClick={handleCancelEdit}>
-            Cancel
+            Отмена
           </button>
         )}
       </div>
@@ -151,15 +151,15 @@ function MainPage() {
         value={searchQuery}
         onChange={handleSearchChange}
         className={style.Input}
-        placeholder="Search by product name"
+        placeholder="Поиск по имени продукта"
       />
       <div className={style.HeaderRow}>
         <span className={style.PrName} onClick={handleSort}>
-          Product Name
+          Имя продукта
         </span>
-        <span className={style.PrPrice}>Price</span>
-        <span className={style.PrCost}>Cost</span>
-        <span className={style.PrAction}>Action</span>
+        <span className={style.PrPrice}>Цена</span>
+        <span className={style.PrCost}>Количество</span>
+        <span className={style.PrAction}>Действие</span>
       </div>
       <div className={`${style.MainPageContainer} ${style.ProductListContainer}`}>
         <ol start="1">
@@ -169,10 +169,10 @@ function MainPage() {
               <span className={style.ProductPrice}>{product.price}</span>
               <span className={style.ProductCost}>{product.cost}</span>
               <button className={style.EditButton} onClick={() => handleEdit(key)}>
-                Edit
+                Изменить
               </button>
               <button className={style.DeleteButton} onClick={() => handleDelete(key)}>
-                Delete
+                Удалить
               </button>
             </li>
           ))}

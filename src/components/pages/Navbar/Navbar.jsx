@@ -4,9 +4,12 @@ import style from './Navbar.module.scss'
 
 const Navbar = () => (
     <div className={style.container}>
-        <h2>Respirator Crud App</h2>
+        <h2>Респиратор</h2>
         <Link to='/'>
-            <h3>Login</h3>
+            <h3>Войти</h3>
+        </Link>
+        <Link to='/request'>
+            <h3>Заявки</h3>
         </Link>
     </div>
 );
