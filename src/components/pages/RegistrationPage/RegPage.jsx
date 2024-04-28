@@ -22,9 +22,9 @@ const Registration = () => {
 
   return (
     <form className={style.regForm} onSubmit={handleSubmit}>
-      <h2>Registration</h2>
-      <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
-      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
+      <h2>Регистрация</h2>
+      <input type="email" placeholder="Почта" onChange={(e) => setEmail(e.target.value)} required />
+      <input type="password" placeholder="Пароль" onChange={(e) => setPassword(e.target.value)} required />
       <button type="submit">Register</button>
     </form>
   );

@@ -19,7 +19,7 @@ const Login = () => {
       navigate('/main');
     } catch (error) {
       console.error("Error in login", error);
-      setError("Invalid email or password");
+      setError("Неверный логин или пароль");
     }
   };
 
